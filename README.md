@@ -2,10 +2,9 @@
 
 ## Intro
 
-Denne forensics workshop er inddelt i fire mindre sessioner, der har hver deres mappe:
+Denne forensics workshop er inddelt i tre mindre sessioner, der har hver deres mappe:
 1. file_analysis
 2. steganography
-3. disk_analysis
 4. memory_analysis
 
 Hver session har to undermapper:
@@ -20,21 +19,39 @@ Hvis du har `git` installeret, kan du hente projektet ned med
 
 Ellers kan du downloade filerne manuelt.
 
-Øvelserne er skrevet i markdown, så det er smartest at åbne dem og deres solutions her på siden (eller med en markdown viewer), så de er korrekt formateret. Så undgår du også at få spoilet hints, du ikke vil se.
+Øvelserne er skrevet i markdown, så det er smartest at åbne dem og deres solutions direkte i GitHub (eller med en markdown viewer), så de er korrekt formateret. Så undgår du også at få spoilet hints, du ikke vil se.
 
 ## Tools
 
-Vi skal bruge en del forskellige tools til øvelserne. De fleste er mest naturlige at finde og bruge på Linux, og det vil være nemmest for jer selv, hvis I har adgang til en Linux maskine - både nu og generelt til CTFer. Gerne bare i en VM eller via WSL.
+Nedenfor følger en liste over tools, der vil være gode at installere før workshoppen, hvis du har tid. De er også alle gode at have til senere CTFer.
 
-Jeg har forsøgt at finde MacOS og Windows udgaver/alternativer til alle tools, så alle bør kunne være med uanset.
+De fleste er mest naturlige at finde og bruge på Linux, og det vil være nemmest for jer selv, hvis I har adgang til en Linux maskine. Det kan på MacOS og Windows installeres i en VM, men kører du Windows er det også meget nemt at sætte op med WSL2. Quick guide:
 
-Nedenfor kommer en liste over tools, der vil være gode at installere før workshoppen, hvis du har tid. De er også alle gode at have til senere CTFer.
+1. Åbn PowerShell som administrator og kør
+
+<!-- -->
+
+    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+2. Genstart Windows
+3. Åbn Powershell som administrator og kør 
+
+<!-- -->
+
+    wsl --set-default-version 2
+
+4. Åbn Microsoft Store, søg på "kali" og installér "Kali Linux"
+5. Du har nu installeret Kali Linux på din Windows. Kør programmet
+6. Ved første kørsel skal du opsætte en ny bruger - den beder dig selv vælge et username og password
+7. Kør `sudo apt update` og `sudo apt upgrade` for at køre første update (password den spørger om er det, du lige valgte)
+
+Hvis du *virkelig* ikke vil have Linux på din Windows har jeg også forsøgt at finde Windows alternativer til de tools, det var muligt for. Dem kan I også se nedenfor.
 
 Alternativt kan du bruge det online toolkit "CyberChef": https://gchq.github.io/CyberChef/. Det kommer med en lang række operationer, du kan anvende på dit input. Operationerne kan chaines til en "opskrift" og gør det meget nemt at lege rundt med forskellige filer og inputs. Ikke alle opgaver kan løses med CyberChef, men en del af de første kan.
 
 ### Linux
 
-### File Analysis
+#### File Analysis
 
 **xxd** (hexdump)
 
@@ -56,18 +73,79 @@ Alternativt kan du bruge det online toolkit "CyberChef": https://gchq.github.io/
 
     sudo apt install pngcheck
 
-### Steganography
+#### Steganography
+
+**bgrep** (binary grep)
+
+    sudo apt install curl
+    mkdir -p $HOME/.local/bin
+    curl -L 'https://github.com/tmbinc/bgrep/raw/master/bgrep.c' | sudo gcc -O2 -x c -o /usr/local/bin/bgrep -
+
+**binwalk** (file carving)
+
+    sudo apt install binwalk
+
+**foremost** (file carving)
+
+    sudo apt install foremost
+
+**stegsolve** (GUI image stego)
+
+    wget http://www.caesum.com/handbook/Stegsolve.jar -O stegsolve
+    chmod +x stegsolve
+
+Kræver Java! Køres med
+
+    java -jar stegsolve
+
+Flyt evt. til en specifik mappe og opret et alias
+
+    mkdir ~/tools
+    mv stegsolve /tools
+    alias stegsolve='java -jar ~/tools/stegsolve'
+
+Nu kan programmet bare køres med kommandoen `stegsolve` i din terminal. Tilføj evt. aliaset til din `.bashrc` for at persiste det til næste session.
+
+**steghide** (stego tool)
+
+    sudo apt install steghide
+
+**stegseek** (crack steghide)
+
+    wget https://github.com/RickdeJager/stegseek/releases/download/v0.6/stegseek_0.6-1.deb
+    sudo apt install ./stegseek_0.6-1.deb
+    rm stegseek_0.6-1.deb
+
+**zsteg** (PNG/BMP textual stego)
+
+    sudo apt install ruby
+    sudo gem install zsteg
 
 
-### Disk Analysis
+#### Memory Analysis
 
+Til memory analysis skal vi bruge programmet Volatility. Det findes i version 2 og 3. Version 3 er lidt nemmere at bruge, men version 2 har stadig nogle plugins, der ikke findes til version 3 endnu. Installér evt. begge for at kunne det hele, men Volatility 3 er fint til denne workshop.
 
-### Memory Analysis
+Volatility kræver Python og dependencies installeres med Pip. Sørg for begge er installeret med
 
+    sudo apt install python3 python3-pip
+
+Hent og installer volatility3 og dens dependencies:
+
+    git clone https://github.com/volatilityfoundation/volatility3.git
+    cd volatility3
+    pip3 install -r requirements.txt
+
+Volatility bruger symbol tables for forskellige operativsystemer for at kunne analysere dem korrekt. Download følgende ZIP-filer og placer dem i mappen `volatility3/symbols/` (inde i hovedmappen, så `volatility3/volatility3/symbols` udefra):
+- Windows: https://downloads.volatilityfoundation.org/volatility3/symbols/windows.zip
+- Linux: https://downloads.volatilityfoundation.org/volatility3/symbols/linux.zip
+- MacOS: https://downloads.volatilityfoundation.org/volatility3/symbols/mac.zip
+
+Bemærk de filer ikke afhænger af, hvilket styresystem du selv bruger, men hvilket styresystem, du skal analysere et memory dump fra. Du kan evt. skippe MacOS fra starten, det ses noget sjældnere i en CTF challenge.
 
 ### Windows
 
-### File Analysis
+#### File Analysis
 
 **file** (filetype detection)
 
@@ -108,35 +186,74 @@ Programmet `pngcheck.win64.exe` kan nu køres via PowerShell el. CMD, f.eks.
 
 (omdøb evt. bare til `pngcheck` og tilføj filplaceringen til din PATH)
 
-### Steganography
+#### Steganography
 
+**bgrep** (binary grep)
 
-### Disk Analysis
+Findes ikke, brug en hex editor i stedet
 
+**binwalk** og **foremost** til file carving findes ikke rigtig til Windows, brug evt. CyberChef online i stedet.
 
-### Memory Analysis
+**dd**
 
+Download http://www.chrysocome.net/downloads/32e035f2bc77d692fc93c48aed01c383/ddrelease64.exe
+
+Omdøb evt. til `dd.exe`.
+
+Programmet kan nu køres via PowerShell el. CMD, f.eks.
+
+    C:\<DOWNLOAD PATH>\dd.exe if=file.png of=test.txt bs=1 skip=4 count=7
+
+(omdøb evt. bare til `strings` og tilføj filplaceringen til din PATH)
+
+**stegsolve** (GUI image stego)
+
+Kræver Java!
+
+Download http://www.caesum.com/handbook/Stegsolve.jar. Kør med
+
+    java -jar Stegsolve.jar
+
+**steghide** (stego tool)
+
+    Download fra http://steghide.sourceforge.net/download.php og unzip.
+
+    Programmet `steghide.exe` kan nu køres via PowerShell el. CMD, f.eks.
+
+    C:\<DOWNLOAD PATH>\steghide-0.5.1-win32\steghide\steghide.exe extract test.jpg
+
+**stegseek** (crack steghide)
+
+Ikke supported på Windows
+
+**zsteg** (PNG/BMP textual stego)
+
+Kræver Ruby, download her: https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-3.1.1-1/rubyinstaller-3.1.1-1-x64.exe
+
+Åbn herefter en cmd prompt og kør
+
+    gem install zsteg
+
+#### Memory Analysis
+
+Følg Linux installationen - udover installationen af Python og Pip, dem kan du bare installere herfra: https://www.python.org/downloads/windows/
 
 ### MacOS
 
-### File Analysis
+Samme installation som Linux, udover et par afvigelser nævnt herunder.
 
-**Hex Fiend** (hex editor)
+Alle `sudo apt install` commands skal også lige udskiftes, afhængig af din package manager (f.eks. Homebrew eller MacPorts).
 
-Download og installér https://github.com/HexFiend/HexFiend/releases/download/v2.14.1/Hex_Fiend_2.14.1.dmg
+Bruger du Homebrew, skal alle `sudo apt install` udskiftes med `sudo brew install`. Homebrew kan installeres med
 
-**exiftool** (extract metadata)
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-Download og installér https://exiftool.org/ExifTool-12.40.dmg
+Bruger du MacPorts, skal alle `sudo apt install` udskiftes med `sudo port install`. Se MacPorts installationsinfo her: https://www.macports.org/install.php
 
-**pngcheck** (check PNG filer)
+Afvigelser:
 
-    brew install pngcheck
+Hverken Homebrew eller MacPorts har `xxd`. Brug `hexdump` i stedet og brug evt. en GUI hex editor som Hex Fiend: https://github.com/HexFiend/HexFiend/releases/download/v2.14.1/Hex_Fiend_2.14.1.dmg
 
-### Steganography
+Kun MacPorts har `steghide`.
 
-
-### Disk Analysis
-
-
-### Memory Analysis
+`stegseek` virker ikke til at være tilgængelig på MacOS

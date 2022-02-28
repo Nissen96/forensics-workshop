@@ -109,7 +109,7 @@ Tag et kig på billedet `so_meta.jpg`, og se om du kan finde noget interessant i
 	Tjek feltet "XP Comment"
 </details>
 
-### Exercise 5 - corrupted file
+## Exercise 5 - corrupted file
 
 Filen `corrupted.png` virker til at være beskadiget og kan ikke åbnes korrekt. `file` kan heller ikke identificere filtypen. Prøv at bruge PNG specification (http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html) til at vurdere, hvad der er galt og ret det med en hex editor. Toolet `pngcheck` kan hjælpe til at identificere fejlene.
 
