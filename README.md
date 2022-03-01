@@ -124,9 +124,11 @@ Nu kan programmet bare køres med kommandoen `stegsolve` i din terminal. Tilføj
 
 #### Memory Analysis
 
-Til memory analysis skal vi bruge programmet Volatility. Det findes i version 2 og 3. Version 3 er lidt nemmere at bruge, men version 2 har stadig nogle plugins, der ikke findes til version 3 endnu. Installér evt. begge for at kunne det hele, men Volatility 3 er fint til denne workshop.
+Til memory analysis skal vi bruge programmet Volatility. Det findes i version 2 og 3. Version 3 er lidt nemmere at bruge, men version 2 har stadig nogle plugins, der ikke findes til version 3 endnu. Det er en god idé at installere begge, så du har alle funktioner klar.
 
-Volatility kræver Python og dependencies installeres med Pip. Sørg for begge er installeret med
+Volatility 2 er nemmest at hente og bruge som standalone program. Download til dit OS her: https://www.volatilityfoundation.org/releases, unzip og kør programmet via en terminal. Det virker til, der ikke er et fungerende link til version 2.6 for Mac og Linux, bare brug version 2.5 til dem.
+
+Volatility 3 kræver Python 3 og dependencies installeres med Pip. Sørg for begge er installeret med
 
     sudo apt install python3 python3-pip
 
@@ -141,7 +143,7 @@ Volatility bruger symbol tables for forskellige operativsystemer for at kunne an
 - Linux: https://downloads.volatilityfoundation.org/volatility3/symbols/linux.zip
 - MacOS: https://downloads.volatilityfoundation.org/volatility3/symbols/mac.zip
 
-Bemærk de filer ikke afhænger af, hvilket styresystem du selv bruger, men hvilket styresystem, du skal analysere et memory dump fra. Du kan evt. skippe MacOS fra starten, det ses noget sjældnere i en CTF challenge.
+Bemærk de filer ikke afhænger af, hvilket styresystem du selv bruger, men hvilket styresystem, du skal analysere et memory dump fra. Du kan evt. skippe MacOS fra starten, det ses noget sjældnere i en CTF challenge, og vi skal ikke bruge det i workshoppen (heller ikke Linux).
 
 ### Windows
 
