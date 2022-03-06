@@ -7,9 +7,11 @@ Denne forensics workshop er inddelt i tre mindre sessioner, der har hver deres m
 2. steganography
 4. memory_analysis
 
-Hver session har to undermapper:
+`file_analysis` og `steganography` har to undermapper:
 - `examples`: eksempelfiler brugt i løbet af sessionen
 - `exercises`: mappe med øvelser og øvelsesfiler. Øverlserne er beskrevet i `README.md` og har hver en række hints, man kan få vist, hvis man sidder lidt fast. Filen `SOLUTIONS.md` indeholder løsningen på alle øvelserne samt til tider lidt ekstra info.
+
+`memory_analysis` indeholder bare en enkelt øvelse, nemlig en case, hvor et memory dump skal analyseres. Gennemgang + spørgsmål findes i mappen i `README.md`.
 
 ## Download projektet
 

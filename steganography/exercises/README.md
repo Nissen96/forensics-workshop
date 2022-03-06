@@ -19,8 +19,13 @@
 Kan du finde et flag i filen `lipsum.txt`? Prøv at bruge `grep` i stedet for bare at søge. `grep` returnerer som default hele den linje, der indeholder matchet - brug `grep -o` for *kun* at returnere matchet.
 
 <details>
-	<summary>Hint</summary>
+	<summary>Hint 1</summary>
 	<code>grep PATTERN lipsum.txt</code>
+</details>
+
+<details>
+	<summary>Hint 2</summary>
+	Prøv at <code>grep</code>pe efter flag formatet, altså <code>"DDC{.*}"</code>
 </details>
 
 
@@ -64,7 +69,7 @@ Der gemmer sig lidt forskelligt i filen `ghost.png` - kan du finde to flag?
 
 <details>
 	<summary>Hint 4</summary>
-	<code>binwalk</code> finder en ekstra PNG-fil. <code>binwalk -e</code> virker dog ikke i dette tilfælde. Når det sker, kan man bruge <code>binwalk --dd=".*"</code> for at tvinge <code>binwalk</code> til at extracte alt den finder. Du kan køre <code>file</code> på hver extracted fil for at se, hvad de indeholder, og herefter give dem korrekt extension og åbne.
+	<code>binwalk</code> finder en ekstra PNG-fil. <code>binwalk -e</code> virker dog ikke i dette tilfælde. Når det sker, kan man bruge <code>binwalk --dd=".*"</code> for at tvinge <code>binwalk</code> til at extracte alt den finder. Du kan herefter køre <code>file</code> på hver extracted fil for at se, hvad de indeholder, og herefter give dem korrekt extension og åbne. Alternativt kan du bruge <code>foremost</code>, som i dette tilfælde extracter den gemte PNG.
 </details>
 
 ## Exercise 4 - manual extraction
@@ -98,22 +103,32 @@ Kører du `dd` kommandoen med de værdier, bør den extracte PNG-billedet til `o
 
 ### Exercise 5 - psyduck
 
-Brug `stegsolve` til at gennemse hver bit plane for RGB-kanalerne i billedet `psyduck.png`. Hvad kan du se? I hvilke planer og kanaler ser du det?
+Prøv at gennemse hver bit plane for RGB-kanalerne i billedet `psyduck.png`. Hvad kan du se? I hvilke planer og kanaler ser du det?
+
+<details>
+	<summary>Hint</summary>
+	Åbn billedet med <code>stegsolve</code>. Køres med <code>java -jar Stegsolve.jar</code>, hvis ikke du har omdøbt filen og oprettet et alias.
+</details>
 
 ### Exercise 6 - pretty cat
 
 Samme teknik er brugt til at gemme data i billedet `pretty_cat.png`, men denne gang er der ikke gemt et billede, men i stedet ASCII tekst. Hvilket tool kan du bruge til at finde teksten? I hvilke kanaler og bits var det gemt?
 
+<details>
+	<summary>Hint</summary>
+	Prøv at køre <code>zsteg</code> på billedet
+</details>
+
 Toolet finder ASCII-teksten automatisk, men tror ikke flaget er en del af teksten og viser det ikke. Prøv at tjekke toolets help menu og se, om du kan extracte al dataen.
 
 <details>
 	<summary>Hint 1</summary>
-	Prøv at køre <code>zsteg</code> på billedet
+	Tag et kig på <code>-l</code> og/eller <code>-E</code>.
 </details>
 
 <details>
 	<summary>Hint 2</summary>
-	<code>zsteg -E</code> kan bruges til at extracte et fuldt payload fra en given kombination af planer og kanaler
+	<code>zsteg -l</code> lader dig sætte en grænse på, hvor mange bytes <code>zsteg</code> kigger i og returnerer (brug <code>zsteg -l 0</code> for ingen limit). <code>zsteg -E</code> kan bruges til at extracte et fuldt payload fra en given kombination af planer og kanaler. Kig herefter payloadet igennem med e.g. <code>strings</code> og <code>grep</code>.
 </details>
 
 ### Exercise 7 - Hackerman
@@ -127,7 +142,7 @@ Er du en ægte hackerman? Se om der skjuler sig noget i `hackerman.jpg` for at b
 
 <details>
 	<summary>Hint 2</summary>
-	Prøv at bruteforce passwordet med <code>stegseek</code>
+	Prøv at bruteforce passwordet med <code>stegseek</code>. Det kræver en wordlist med passwords, <code>stegseek</code> kan afprøve. Den mest populære hedder <code>rockyou.txt</code>. Der ligger en kopi i ZIP-filen <code>rockyou.zip</code>, hvis du ikke selv har den liggende.
 </details>
 
 <details>

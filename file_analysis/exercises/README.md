@@ -18,7 +18,7 @@ Decode følgende:
 
 <details>
 	<summary>Hint 1</summary>
-	Decode fra binary
+	Decode fra binary til ASCII (det er typisk til ASCII, når vi snakker om at decode)
 </details>
 
 <details>

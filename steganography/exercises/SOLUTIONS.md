@@ -17,7 +17,7 @@ Her søger vi med en regular expression, hvor punktum betyder "en hvilken som he
 
 	DDC{camouflage_flag}
 
-DOCX-filer (og flere andre Office filer) er faktisk bare ZIP-arkiver, der indeholder en række XML-filer.Prøv at unzippe dokumentet (omdøb evt. først og sæt extension til `.zip`).
+DOCX-filer (og flere andre Office filer) er faktisk bare ZIP-arkiver, der indeholder en række XML-filer. Prøv at unzippe dokumentet (omdøb evt. først og sæt extension til `.zip`).
 
 Word-arkivet indeholder den gemte fil `flag.txt` med flaget:
 
@@ -30,7 +30,7 @@ Første flag er blevet direkte gemt som ASCII-tekst i filen. Brug `strings` til 
 
 	strings ghost.png | grep -o "DDC{.*}"
 
-Giver flaget `DDC{strings|grep_is_your_friend}`.
+Det giver flaget `DDC{strings|grep_is_your_friend}`.
 
 I filen gemmer sig også et ekstra PNG-billede, vi kan extracte med file carving teknikker. Både `foremost` og `binwalk` finder den ekstra billedefil og `foremost` extracter den også automatisk.
 
@@ -72,12 +72,12 @@ får vi extractet 5697 bytes fra offset 5000 og frem - hvilket lige præcis er P
 
 Flaget er delt op i tre:
 1. Red plane 0: `DDC{rød_som_rosen`
-2. Green plane 1: `grøn_som_græs_`
+2. Green plane 1: `_grøn_som_græs_`
 3. Blue plane 4: `blå_som_havet}`
 
-Fuldt flag: `DDC{rød_som_rosengrøn_som_græs_blå_som_havet}` (og ja, jeg er klar over jeg glemte en underscore xD )
+Fuldt flag: `DDC{rød_som_rosen_grøn_som_græs_blå_som_havet}`
 
-Læg mærke til, at sidste del var gemt help oppe i plane 4, altså den 4. mest signifikante bit. Ser du grundigt efter, vil du på det originale billede også svagt kunne skimte noget gul tekst der - det kunne man ikke, hvis det var gemt i en af de mindst signifikante bits.
+Læg mærke til, at sidste del var gemt helt oppe i plane 4, altså den 4. mest signifikante bit. Ser du grundigt efter, vil du på det originale billede også svagt kunne skimte noget gul tekst - det kunne man ikke, hvis det var gemt i en af de mindst signifikante bits.
 
 ### Exercise 6 - pretty cat
 
@@ -85,15 +85,21 @@ Vi kan bruge toolet `zsteg` til at finde skjult tekstdata i et PNG-billede. Kør
 
 	b1,rgb,lsb,xy       .. text: "Well done, you managed to use the classic LSB method. Now you know that there's nothing in the sea this fish would fear. Other fish run from bigger things. That's their instinct. But this fish doesn't run from anything. He doesn't fear. Here is your flag: "
 
-Første del fortæller os, at dataen er gemt i bit plane 1 i alle tre RGB-kanaler, altså LSB. Vi får dog ikke hele dataen, `zsteg` giver os kun et preview. Årsagen til det er, at der kan være gemt store mængder data. Vil vi extracte det, kan vi bruge flaget `-E NAME`, hvor `NAME` i vores tilfælde er `b1,rgb,lsb,xy` - der hvor vi fandt dataen. Resultatet printes bare til skærmen, men vi kan redirecte til en fil i stedet:
+Første del fortæller os, at dataen er gemt i bit plane 1 i alle tre RGB-kanaler, altså LSB. Vi får dog ikke hele dataen, `zsteg` giver os kun et preview. Det skyldes, at `zsteg` som default kun tjekker de første 256 bytes med hver mulig kombination, da ekstra data typisk er skjult i starten, og det ellers vil tage lang tid at køre på store filer.
+
+Et muligt fix er at give `zsteg` flaget `-l N`, hvor `N` er den limit, man vil køre `zsteg` med. Brug 0 for at fjerne limit helt. Vi kan altså f.eks. få flaget med ved at forøge limit til 400:
+
+	zsteg -l 400 pretty_cat.png
+
+En anden option er at bruge `-E NAME` til at extracte data fra filen. `NAME` er den kombination af kanaler, planer, osv., man vil bruge til at lave et extract - i vores tilfælde `b1,rgb,lsb,xy`, hvor vi fandt dataen. Resultatet printes bare til skærmen, men vi kan redirecte til en fil i stedet:
 
 	zsteg -E b1,rgb,lsb,xy pretty_cat.png > output.txt
 
-Printer vi det, e.g. med
+Denne option tjekker ikke, om dataen er ASCII tekst, men extracter bare ud fra det givne `NAME`, så i vores tilfælde extracter den meget data efter teksten er slut. Vi kan se starten af filen med f.eks.:
 
 	less output.txt
 
-kan vi se flaget: `shkCTF{Y0u_foUnD_m3_thr0ugH_LSB_6a5e99dfacf793e27a}`
+eller igen bruge `strings | grep` og se flaget: `shkCTF{Y0u_foUnD_m3_thr0ugH_LSB_6a5e99dfacf793e27a}`
 
 ### Exercise 7 - Hackerman
 
@@ -101,6 +107,12 @@ Dataen i billedet er skjult med `steghide`, men vi kender ikke passwordet. Vi ka
 
 	stegseek hackerman.jpg
 
-Det finder passwordet "almost" og extracter resultatet, som er "SFRCezN2MWxfYzBycH0=". Det er base64 encoded, og vi kan decode til
+`stegseek` skal bruge en wordlist med passwords den kan tjekke. Den leder efter standardlisten `rockyou.txt`, der følger med Kali, men som du potentielt ellers ikke har liggende. Der ligger dog en kopi af `rockyou.txt` i denne mappe i ZIP-filen `rockyou.zip`, så du kan extracte den og køre
+
+	stegseek hackerman.jpg rockyou.txt
+
+for at bruge den wordlist. Det finder passwordet "almost" og extracter resultatet, som er "SFRCezN2MWxfYzBycH0=". Det er base64 encoded, og vi kan decode til
 
 	HTB{3v1l_c0rp}
+
+Tip: Du kan finde andre gode wordlists her: https://github.com/danielmiessler/SecLists. `rockyou.txt` er den mest populære password list, men der findes mange andre til mere specifikke cases, eller med f.eks. mest brugte usernames.

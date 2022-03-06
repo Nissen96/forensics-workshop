@@ -2,7 +2,7 @@
 
 ## Exercise 1 - encodings
 
-Strengen er binær data og vi decoder først fra binary:
+Strengen er binær data og vi decoder først fra binary til ASCII:
 
 	50 41 54 58 50 50 39 61 98 51 43 62 98 110 116 50 68 108 85 53 49 42 65 71 52 43 63 41 47 35 50 41 117 100 56 49 42 65 65 53 43 63 33 91 79 50 68 72 61 51 50 93 115 110 54 43 63 33 100 82 50 68 90 73 51 48 100 38 56 52 43 62 117 50 37 50 68 81 67 51 50 93 116 37 61 43 62 117 44 35 50 68 99 79 53 50 93 116 34 60 43 63 33 94 80 50 41 108 94 55 49 69 92 83 52 43 62 117 50 37 50 68 108 85 55 51 36 58 34 50 43 62 91 79
 
@@ -10,7 +10,7 @@ Dette er igen en numerisk encoding - ligner mest af alt almindelig decimal. Deco
 
 	2)6:22'=b3+>bnt2DlU51*AG4+?)/#2)ud81*AA5+?![O2DH=32]sn6+?!dR2DZI30d&84+>u2%2DQC32]t%=+>u,#2DcO52]t"<+?!^P2)l^71E\S4+>u2%2DlU73$:"2+>[O
 
-Dette kan være sværere at genkende, men er Base85, vi igen kan decode:
+Dette kan være sværere at genkende, men er Base85, vi igen kan decode til ASCII:
 
 	52 45 52 44 65 32 56 75 59 32 39 6b 61 57 35 6e 63 31 39 68 62 47 78 66 64 47 68 6c 58 33 64 68 65 58 30 3d
 
@@ -46,7 +46,7 @@ PDF-filer har magic number `25 50 44 46`, som i ASCII er `%PDF`. Dvs. PDF-filer 
 
 2. Søg på PNG. Traileren er i hex `49 45 4E 44 AE 42 60 82` - sådan slutter PNG-filer. De første fire bytes er i ASCII `IEND`.
 
-3. Køres `file what_filetype` får man bare svaret `data`, fordi `file` ikke genkender signaturen. Filens signatur er `38 7A BC AF 27 11` og den første og sidste byte er ændret. Hvis man søger på nogle par af bytes - f.eks. `38 7A`, `7A BC`, `BC AF` - finder man hurtigt frem til filtypen `7Z`, en 7-Zip komprimeret fil. Den har signaturen `37 7A BC AF 27 1C`. Åbn en hex editor og ændr første byte fra `38 -> 37` og sidste fra `11 -> 1C`, så signaturen er rigtig. Køres `file` igen, får man nu den rigtige filtype identificeret. Extract indholdet af filen med `7z e what_filetype`
+3. Køres `file what_filetype` får man bare svaret `data`, fordi `file` ikke genkender signaturen. Filens signatur er `38 7A BC AF 27 11` og den første og sidste byte er ændret. Hvis man søger på nogle par af bytes - f.eks. `38 7A`, `7A BC`, `BC AF` - finder man hurtigt et match på dem, der ikke indeholder en corrupted byte, og man finder frem til filtypen `7Z`, en 7-Zip komprimeret fil. Den har signaturen `37 7A BC AF 27 1C`. Åbn en hex editor og ændr første byte fra `38 -> 37` og sidste fra `11 -> 1C`, så signaturen er rigtig. Køres `file` igen, får man nu den rigtige filtype identificeret. Extract indholder `flag.txt` med `7z e what_filetype` for at få flaget `DDC{don't_assume_file_knows_the_answer!}`.
 
 ## Exercise 4 - metadata
 
