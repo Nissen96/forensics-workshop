@@ -118,6 +118,8 @@ Nu kan programmet bare køres med kommandoen `stegsolve` i din terminal. Tilføj
     sudo apt install ./stegseek_0.6-1.deb
     rm stegseek_0.6-1.deb
 
+`stegseek` skal bruge en wordlist med passwords den kan tjekke. Den leder som default efter wordlisten `rockyou.txt`, der følger med Kali og er den mest brugte password list. Har du ikke Kali (eller vil du bruge en anden wordlist) kan du finde en række muligheder her: https://github.com/danielmiessler/SecLists.
+
 **zsteg** (PNG/BMP textual stego)
 
     sudo apt install ruby
