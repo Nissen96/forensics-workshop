@@ -19,9 +19,20 @@ Hvis du har `git` installeret, kan du hente projektet ned med
 
     git clone https://github.com/Nissen96/forensics-workshop.git
 
-Ellers kan du downloade filerne manuelt.
+Til memory analysis delen ligger filen `malpdf.zip`, der er uploadet via Git LFS fordi den er over 100 MB. Hvis du har Git LFS installeret, bliver den automatisk hentet ned med `clone`, ellers skal du lige hente den manuelt.
 
 Øvelserne er skrevet i markdown, så det er smartest at åbne dem og deres solutions direkte i GitHub (eller med en markdown viewer), så de er korrekt formateret. Så undgår du også at få spoilet hints, du ikke vil se.
+
+## Ressourcer
+
+Her er en række relevante links, der bliver brugt eller nævnt i Workshoppen:
+
+- Stego-toolkit: https://github.com/DominicBreuker/stego-toolkit
+- CTF Field Guide: https://trailofbits.github.io/ctf/forensics/
+- HackTricks: https://book.hacktricks.xyz/forensics
+- Forensics labs: https://cyberdefenders.org/
+- 13Cubed: https://www.youtube.com/c/13cubed
+- BlueTrainer CTF: https://discord.gg/2eaBBbgxRK
 
 ## Tools
 
