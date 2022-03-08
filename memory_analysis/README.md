@@ -18,7 +18,7 @@ Tip: Lav en `evidence` mappe og gem resultatet fra alle scanninger der, så de k
 
 #### Profil
 
-Volatility kræver en *profil* af dumpet, for at kunne forstå og analysere det. Det klarer volatility 3 selv, men i volatility 2 skal profilen først findes manuelt.
+Volatility 2 kræver en *profil* af dumpet, for at kunne forstå og analysere det (ikke nødvendigt med Volatility 3, der skal du bare have downloadet symbol tables).
 
 Til det kan man bruge `imageinfo` og `kdbgscan`. `imageinfo` giver forslag til profiler ud fra dumpet og kører hurtigere en `kdbgscan`, men `kdbgscan` er beregnet til at være mere pålideligt og forsøger at finde den rigtige profil med sikkerhed.
 
