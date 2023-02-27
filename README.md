@@ -1,63 +1,37 @@
-# Forensics Workshop - DDC 2022
+# Forensics Workshop - DDC 2023
 
 ## Intro
 
-Denne forensics workshop er inddelt i tre mindre sessioner, der har hver deres mappe:
-1. file_analysis
-2. steganography
-4. memory_analysis
+Denne workshop er inddelt i tre hovedområder, der hver har tilknyttet et oplæg samt en exercise session.
+Vi vil bruge CTFd til øvelserne, så de mapper, der ligger herinde er ikke relevante i år, kun denne README.
 
-`file_analysis` og `steganography` har to undermapper:
-- `examples`: eksempelfiler brugt i løbet af sessionen
-- `exercises`: mappe med øvelser og øvelsesfiler. Øvelserne er beskrevet i `README.md` og har hver en række hints, man kan få vist, hvis man sidder lidt fast. Filen `SOLUTIONS.md` indeholder løsningen på alle øvelserne samt til tider lidt ekstra info.
+## VM opsætning
 
-`memory_analysis` indeholder bare en enkelt øvelse, nemlig en case, hvor et memory dump skal analyseres. Gennemgang + spørgsmål findes i mappen i `README.md`.
+Jeg har forberedt en Kali VM med alle de nødvendige tools og filer på, som nemt kan importeres i VirtualBox.
 
-## Download projektet
+Vær opmærksom på, at filen er næsten 15 GB, så den kan tage et godt stykke tid at downloade og sætte op.
 
-Hvis du har `git` installeret, kan du hente projektet ned med
+Steps:
 
-    git clone https://github.com/Nissen96/forensics-workshop.git
+1. Download VirtualBox fra https://www.virtualbox.org/ og installér
+2. Hent OVA-filen til workshoppen herfra: https://nextcloud.ntp-event.dk:8443/s/cGMyWDTBwCg5bLJ/download/Forensics%20Workshop%20-%20DDC%202023%20%28kali%29.ova
+3. Åben VirtualBox, klik "Tools" og herefter "Import"
+4. I inputfeltet skal stien til OVA-filen stå, så klik på mappeikonet og vælg filen
+5. Under indstillinger kan du evt. vælge en anden Machine Base Folder
+6. Sørg for at "Import hard drives as VDI" er markeret
+7. Vælg Finish og vent på import
 
-Til memory analysis delen ligger filen `malpdf.zip`, der er uploadet via Git LFS fordi den er over 100 MB. Hvis du har Git LFS installeret, bliver den automatisk hentet ned med `clone`, ellers skal du lige hente den manuelt.
+Du kan nu køre den virtuelle maskine og tilgå de tools og filer, vi skal bruge til workshoppen.
 
-Øvelserne er skrevet i markdown, så det er smartest at åbne dem og deres solutions direkte i GitHub (eller med en markdown viewer), så de er korrekt formateret. Så undgår du også at få spoilet hints, du ikke vil se.
-
-## Ressourcer
-
-Her er en række relevante links, der bliver brugt eller nævnt i Workshoppen:
-
-- Stego-toolkit: https://github.com/DominicBreuker/stego-toolkit
-- CTF Field Guide: https://trailofbits.github.io/ctf/forensics/
-- HackTricks: https://book.hacktricks.xyz/forensics
-- Forensics labs: https://cyberdefenders.org/
-- 13Cubed: https://www.youtube.com/c/13cubed
+Username og password er begge `kali`.
 
 ## Tools
 
-Nedenfor følger en liste over tools, der vil være gode at installere før workshoppen, hvis du har tid. De er også alle gode at have til senere CTFer.
+Du er velkommen til at bruge din egen VM / setup, men det antages du har adgang til Linux.
 
-De fleste er mest naturlige at finde og bruge på Linux, og det vil være nemmest for jer selv, hvis I har adgang til en Linux maskine. Det kan på MacOS og Windows installeres i en VM, men kører du Windows er det også meget nemt at sætte op med WSL2. Quick guide:
+Nedenfor er listen over de tools, vi kommer til at bruge, samt installationsinstruktioner til hver. De er alle gode at have til fremtidige CTFs.
 
-1. Åbn PowerShell som administrator og kør
-
-<!-- -->
-
-    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-
-2. Genstart Windows
-3. Åbn Powershell som administrator og kør 
-
-<!-- -->
-
-    wsl --set-default-version 2
-
-4. Åbn Microsoft Store, søg på "kali" og installér "Kali Linux"
-5. Du har nu installeret Kali Linux på din Windows. Kør programmet
-6. Ved første kørsel skal du opsætte en ny bruger - den beder dig selv vælge et username og password
-7. Kør `sudo apt update` og `sudo apt upgrade` for at køre første update (password den spørger om er det, du lige valgte)
-
-Alternativt kan du bruge det online toolkit "CyberChef": https://gchq.github.io/CyberChef/. Det kommer med en lang række operationer, du kan anvende på dit input. Operationerne kan chaines til en "opskrift" og gør det meget nemt at lege rundt med forskellige filer og inputs. Ikke alle opgaver kan løses med CyberChef, men en del af de første kan.
+Alternativt (eller som supplement) kan du bruge det online toolkit "CyberChef": https://gchq.github.io/CyberChef/. Det kommer med en lang række operationer, du kan anvende på dit input. Operationerne kan chaines til en "opskrift" og gør det meget nemt at lege rundt med forskellige filer og inputs. Ikke alle opgaver kan løses med CyberChef, men en del af de første kan.
 
 ### Linux
 
@@ -133,14 +107,17 @@ Nu kan programmet bare køres med kommandoen `stegsolve` i din terminal. Tilføj
     sudo apt install ruby
     sudo gem install zsteg
 
-
 #### Memory Analysis
 
 Til memory analysis skal vi bruge programmet Volatility. Det findes i version 2 og 3. Version 3 er lidt nemmere at bruge, men version 2 har stadig nogle plugins, der ikke findes til version 3 endnu. Det er en god idé at installere begge, så du har alle funktioner klar.
 
-Volatility 2 er nemmest at hente og bruge som standalone program. Download til dit OS her: https://www.volatilityfoundation.org/releases, unzip og kør programmet via en terminal. Det virker til, der ikke er et fungerende link til version 2.6 for Mac og Linux, bare brug version 2.5 til dem.
+Volatility 2 er nemmest at hente og bruge som standalone program. Unzip og kør programmet via en terminal:
 
-Volatility 3 kræver Python 3 og dependencies installeres med Pip. Sørg for begge er installeret med
+- Linux: http://downloads.volatilityfoundation.org/releases/2.6/volatility_2.6_lin64_standalone.zip
+- Windows: http://downloads.volatilityfoundation.org/releases/2.6/volatility_2.6_win64_standalone.zip
+- Mac: http://downloads.volatilityfoundation.org/releases/2.6/volatility_2.6_mac64_standalone.zip
+
+Volatility 3 kræver Python 3, og dependencies installeres med Pip. Sørg for begge er installeret med
 
     sudo apt install python3 python3-pip
 
@@ -155,4 +132,56 @@ Volatility bruger symbol tables for forskellige operativsystemer for at kunne an
 - Linux: https://downloads.volatilityfoundation.org/volatility3/symbols/linux.zip
 - MacOS: https://downloads.volatilityfoundation.org/volatility3/symbols/mac.zip
 
-Bemærk de filer ikke afhænger af, hvilket styresystem du selv bruger, men hvilket styresystem, du skal analysere et memory dump fra. Du kan evt. skippe MacOS fra starten, det ses noget sjældnere i en CTF challenge, og vi skal ikke bruge det i workshoppen (heller ikke Linux).
+Bemærk de filer ikke afhænger af, hvilket styresystem du selv bruger, men hvilket styresystem, du skal analysere et memory dump fra. Du kan skippe MacOS fra starten, det ses noget sjældnere i en CTF challenge, og vi skal ikke bruge det i workshoppen (heller ikke Linux, men det ses regelmæssigt).
+
+
+### Windows
+
+Bruger du Windows, er det hurtigt at sætte en Linux op i WSL:
+
+1. Åbn PowerShell som administrator og kør
+
+    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+2. Genstart Windows
+3. Åbn Powershell som administrator og kør 
+
+    wsl --set-default-version 2
+
+4. Åbn Microsoft Store, søg på "kali" og installér "Kali Linux"
+5. Du har nu installeret Kali Linux på din Windows. Kør programmet
+6. Ved første kørsel skal du opsætte en ny bruger - den beder dig selv vælge et username og password
+7. Kør `sudo apt update` og `sudo apt upgrade` for at køre første update (password den spørger om er det, du lige valgte)
+
+## Repo
+
+OBS: Vi kommer ikke til at følge denne struktur i år, vi bruger i stedet CTFd!
+
+Denne forensics workshop er inddelt i tre mindre sessioner, der har hver deres mappe:
+
+1. file_analysis
+2. steganography
+4. memory_analysis
+
+`file_analysis` og `steganography` har to undermapper:
+- `examples`: eksempelfiler brugt i løbet af sessionen
+- `exercises`: mappe med øvelser og øvelsesfiler. Øvelserne er beskrevet i `README.md` og har hver en række hints, man kan få vist, hvis man sidder lidt fast. Filen `SOLUTIONS.md` indeholder løsningen på alle øvelserne samt til tider lidt ekstra info.
+
+`memory_analysis` indeholder bare en enkelt øvelse, nemlig en case, hvor et memory dump skal analyseres. Gennemgang + spørgsmål findes i mappen i `README.md`.
+
+Øvelserne er skrevet i markdown, så det er smartest at åbne dem og deres solutions direkte i GitHub (eller med en markdown viewer), så de er korrekt formateret. Så undgår du også at få spoilet hints, du ikke vil se.
+
+OBS: Vi kommer ikke til at følge denne struktur i år, vi bruger i stedet CTFd!
+
+## Ressourcer
+
+Her er en række relevante links, der bliver brugt eller nævnt i Workshoppen:
+
+
+- CTF Field Guide: https://trailofbits.github.io/ctf/forensics/
+- HackTricks: https://book.hacktricks.xyz/generic-methodologies-and-resources/basic-forensic-methodology
+- Forensics labs: https://cyberdefenders.org/blueteam-ctf-challenges/
+- Flere forensics labs: https://blueteamlabs.online/
+- 13Cubed: https://www.youtube.com/c/13cubed
+- Stego-toolkit: https://github.com/DominicBreuker/stego-toolkit
+- Aperi'solve: https://aperisolve.com/
